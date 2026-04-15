@@ -7,10 +7,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.android.practise.kata.presentation.dictionary.AddDictionaryEntryScreen
+import com.android.practise.kata.presentation.dictionary.mvi.AddDictionaryEntryContract
 import com.android.practise.kata.simplenotebookapp.ui.theme.SimpleNoteBookAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,8 +25,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             SimpleNoteBookAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    var state by remember { mutableStateOf(AddDictionaryEntryContract.AddDictionaryEntryState()) }
+
+                    AddDictionaryEntryScreen(
+                        state = state,
+                        onIntent = { intent ->
+                            when (intent) {
+                                is AddDictionaryEntryContract.AddDictionaryEntryEvent.OnWordChanged -> {
+                                    state = state.copy(word = intent.word)
+                                }
+                                is AddDictionaryEntryContract.AddDictionaryEntryEvent.OnMeaningChanged -> {
+                                    state = state.copy(meaning = intent.meaning)
+                                }
+                                AddDictionaryEntryContract.AddDictionaryEntryEvent.OnSaveClicked -> {
+                                    println("Saved: ${state.word} - ${state.meaning}")
+                                    state = AddDictionaryEntryContract.AddDictionaryEntryState() // Reset
+                                }
+                            }
+                        },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -30,18 +51,16 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AddDictionaryEntryPreview() {
     SimpleNoteBookAppTheme {
-        Greeting("Android")
+        AddDictionaryEntryScreen(
+            state = AddDictionaryEntryContract.AddDictionaryEntryState(
+                word = "Example",
+                meaning = "This is an example meaning."
+            ),
+            onIntent = {}
+        )
     }
 }
