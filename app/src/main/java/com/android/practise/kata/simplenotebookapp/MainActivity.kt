@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.practise.kata.presentation.dictionary.AddDictionaryEntryScreen
+import com.android.practise.kata.presentation.dictionary.mvi.AddDictionaryEntryContract
 import com.android.practise.kata.simplenotebookapp.ui.theme.SimpleNoteBookAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,20 +25,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             SimpleNoteBookAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    var word by remember { mutableStateOf("") }
-                    var meaning by remember { mutableStateOf("") }
+                    var state by remember { mutableStateOf(AddDictionaryEntryContract.AddDictionaryEntryState()) }
 
                     AddDictionaryEntryScreen(
-                        word = word,
-                        onWordChange = { word = it },
-                        meaning = meaning,
-                        onMeaningChange = { meaning = it },
-                        onAddClick = {
-                            // Handle add word action
-                            println("Added Word: $word, Meaning: $meaning")
-                            // Reset fields after adding
-                            word = ""
-                            meaning = ""
+                        state = state,
+                        onIntent = { intent ->
+                            when (intent) {
+                                is AddDictionaryEntryContract.AddDictionaryEntryEvent.OnWordChanged -> {
+                                    state = state.copy(word = intent.word)
+                                }
+                                is AddDictionaryEntryContract.AddDictionaryEntryEvent.OnMeaningChanged -> {
+                                    state = state.copy(meaning = intent.meaning)
+                                }
+                                AddDictionaryEntryContract.AddDictionaryEntryEvent.OnSaveClicked -> {
+                                    println("Saved: ${state.word} - ${state.meaning}")
+                                    state = AddDictionaryEntryContract.AddDictionaryEntryState() // Reset
+                                }
+                            }
                         },
                         modifier = Modifier.padding(innerPadding)
                     )
@@ -52,11 +56,11 @@ class MainActivity : ComponentActivity() {
 fun AddDictionaryEntryPreview() {
     SimpleNoteBookAppTheme {
         AddDictionaryEntryScreen(
-            word = "Example",
-            onWordChange = {},
-            meaning = "This is an example meaning.",
-            onMeaningChange = {},
-            onAddClick = {}
+            state = AddDictionaryEntryContract.AddDictionaryEntryState(
+                word = "Example",
+                meaning = "This is an example meaning."
+            ),
+            onIntent = {}
         )
     }
 }
