@@ -73,6 +73,6 @@ subprojects {
 
 dependencyCheck {
     format = "HTML"
-    outputDirectory = "$projectDir/build/reports/dependency-check"
+    outputDirectory.set(file("$projectDir/build/reports/dependency-check"))
     failBuildOnCVSS = 8.0f
 }

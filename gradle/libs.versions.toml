@@ -22,7 +22,7 @@ archCore = "2.2.0"
 room = "2.6.1"
 detekt = "1.23.6"
 ktlint = "12.1.1"
-dependencycheck = "10.0.4"
+dependencycheck = "12.2.2"
 
 
 
