@@ -14,20 +14,24 @@ import javax.inject.Inject
 
 class DictionaryRepositoryImpl(
     private val localDataSource: DictionaryLocalDataSource,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : DictionaryRepository {
-
     @Inject
     constructor(localDataSource: DictionaryLocalDataSource) : this(localDataSource, Dispatchers.IO)
 
-    override fun saveEntry(word: String, meaning: String): Flow<Either<Failure, Boolean>> = flow {
-        try {
-            localDataSource.saveEntry(word, meaning)
-            emit(Either.Right(true))
-        } catch (ioException: IOException) {
-            emit(Either.Left(Failure.NetworkError(ioException)))
-        } catch (exception: Exception) {
-            emit(Either.Left(Failure.UnknownError(exception)))
-        }
-    }.flowOn(ioDispatcher)
+    @Suppress("TooGenericExceptionCaught")
+    override fun saveEntry(
+        word: String,
+        meaning: String,
+    ): Flow<Either<Failure, Boolean>> =
+        flow {
+            try {
+                localDataSource.saveEntry(word, meaning)
+                emit(Either.Right(true))
+            } catch (ioException: IOException) {
+                emit(Either.Left(Failure.NetworkError(ioException)))
+            } catch (exception: Exception) {
+                emit(Either.Left(Failure.UnknownError(exception)))
+            }
+        }.flowOn(ioDispatcher)
 }

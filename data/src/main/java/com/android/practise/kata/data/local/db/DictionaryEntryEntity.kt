@@ -8,5 +8,5 @@ data class DictionaryEntryEntity(
     @PrimaryKey
     val word: String,
     val meaning: String,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
 )

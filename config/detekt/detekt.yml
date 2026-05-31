@@ -1,0 +1,40 @@
+# Detekt configuration file override
+# See: https://detekt.dev/docs/introduction/configurations/
+
+config:
+  validation: true
+
+style:
+  # Allow MagicNumbers (often used in Compose colors, paddings, sizes)
+  MagicNumber:
+    active: false
+  # Allow wildcard imports as Kotlin/Compose sometimes utilize them
+  WildcardImport:
+    active: false
+  MaxLineLength:
+    active: true
+    maxLineLength: 140
+
+
+naming:
+  # Support PascalCase for Compose @Composable functions
+  FunctionNaming:
+    active: true
+    functionPattern: '[a-zA-Z_][a-zA-Z0-9_]*'
+  # Support standard variable naming conventions
+  VariableNaming:
+    active: true
+    variablePattern: '[a-zI_][a-zA-Z0-9_]*'
+  # Allow underscores in package names (e.g. core_ui)
+  PackageNaming:
+    active: true
+    packagePattern: '[a-z]+(\.[a-z_][a-zA-Z0-9_]*)*'
+  # Allow helper objects and Composable functions to co-exist without strict MatchingDeclarationName rule
+  MatchingDeclarationName:
+    active: false
+
+complexity:
+  # Raise the limit of complex methods if needed
+  LongMethod:
+    active: true
+    threshold: 100

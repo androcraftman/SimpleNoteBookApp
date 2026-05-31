@@ -40,7 +40,8 @@ class MainActivity : ComponentActivity() {
                         when (effect) {
                             AddDictionaryEntryContract.AddDictionaryEntryEffect.NavigateBack -> {
                                 Toast.makeText(context, "Entry saved!", Toast.LENGTH_SHORT).show()
-                                 finish() // Usually handled by navigation, but here we can just toast for now or finish if it's the only screen
+                                // Usually handled by navigation, but here we can just finish
+                                finish()
                             }
 
                             is AddDictionaryEntryContract.AddDictionaryEntryEffect.ShowToast -> {
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
                         onIntent = { intent ->
                             addDictionaryEntryViewModel.event(intent)
                         },
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
@@ -69,11 +70,12 @@ class MainActivity : ComponentActivity() {
 fun AddDictionaryEntryPreview() {
     SimpleNoteBookAppTheme {
         AddDictionaryEntryScreen(
-            state = AddDictionaryEntryContract.AddDictionaryEntryState(
-                word = "Example",
-                meaning = "This is an example meaning."
-            ),
-            onIntent = {}
+            state =
+                AddDictionaryEntryContract.AddDictionaryEntryState(
+                    word = "Example",
+                    meaning = "This is an example meaning.",
+                ),
+            onIntent = {},
         )
     }
 }

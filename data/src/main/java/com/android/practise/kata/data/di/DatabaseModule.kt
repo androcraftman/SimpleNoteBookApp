@@ -16,14 +16,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): DictionaryDatabase {
+    fun provideDatabase(
+        @ApplicationContext context: Context,
+    ): DictionaryDatabase {
         return Room.databaseBuilder(
             context,
             DictionaryDatabase::class.java,
-            "dictionary_database"
+            "dictionary_database",
         ).build()
     }
 
@@ -35,9 +36,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDictionaryLocalDataSource(
-        dictionaryDao: DictionaryDao
-    ): DictionaryLocalDataSource {
+    fun provideDictionaryLocalDataSource(dictionaryDao: DictionaryDao): DictionaryLocalDataSource {
         return DictionaryLocalDataSourceImpl(dictionaryDao)
     }
 }

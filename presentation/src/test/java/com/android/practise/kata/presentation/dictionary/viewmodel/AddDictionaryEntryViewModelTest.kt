@@ -1,6 +1,8 @@
 package com.android.practise.kata.presentation.dictionary.viewmodel
 
 import app.cash.turbine.test
+import com.android.practise.kata.core.error.Failure
+import com.android.practise.kata.core.functional.Either
 import com.android.practise.kata.domain.usecases.addentry.SaveDictionaryEntryUseCase
 import com.android.practise.kata.presentation.dictionary.mvi.AddDictionaryEntryContract.AddDictionaryEntryEffect
 import com.android.practise.kata.presentation.dictionary.mvi.AddDictionaryEntryContract.AddDictionaryEntryEvent
@@ -12,15 +14,13 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import com.android.practise.kata.core.functional.Either
-import com.android.practise.kata.core.error.Failure
-import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddDictionaryEntryViewModelTest: BehaviorSpec({
+class AddDictionaryEntryViewModelTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     val testDispatcher = UnconfinedTestDispatcher()
@@ -83,9 +83,10 @@ class AddDictionaryEntryViewModelTest: BehaviorSpec({
 
             Then("it should update state with the error message") {
                 val viewModel = AddDictionaryEntryViewModel(saveDictionaryEntryUseCase)
-                coEvery { saveDictionaryEntryUseCase(any(), any()) } returns flowOf(
-                    Either.Left(Failure.UnknownError(Exception("Failed to save")))
-                )
+                coEvery { saveDictionaryEntryUseCase(any(), any()) } returns
+                    flowOf(
+                        Either.Left(Failure.UnknownError(Exception("Failed to save"))),
+                    )
                 viewModel.event(AddDictionaryEntryEvent.OnWordChanged("Word"))
                 viewModel.event(AddDictionaryEntryEvent.OnMeaningChanged("Meaning"))
                 viewModel.event(AddDictionaryEntryEvent.OnSaveClicked)

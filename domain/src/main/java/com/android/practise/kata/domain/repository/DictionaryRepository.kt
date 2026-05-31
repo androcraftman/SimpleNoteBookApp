@@ -5,5 +5,8 @@ import com.android.practise.kata.core.functional.Either
 import kotlinx.coroutines.flow.Flow
 
 interface DictionaryRepository {
-    fun saveEntry(word: String, meaning: String): Flow<Either<Failure, Boolean>>
+    fun saveEntry(
+        word: String,
+        meaning: String,
+    ): Flow<Either<Failure, Boolean>>
 }

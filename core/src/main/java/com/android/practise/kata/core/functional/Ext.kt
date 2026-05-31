@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.stateIn
 fun <T> Flow<T>.stateInWhileActive(
     scope: CoroutineScope,
     initialValue: T,
-    onActive: () -> Unit
+    onActive: () -> Unit,
 ): StateFlow<T> {
     onActive()
     return this.stateIn(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = initialValue
+        initialValue = initialValue,
     )
 }
