@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.practise.kata.presentation.dictionary.AddDictionaryEntryScreen
 import com.android.practise.kata.presentation.dictionary.mvi.AddDictionaryEntryContract
-import com.android.practise.kata.presentation.dictionary.viewmodel.AddDictionaryEntryViewModel
+import com.android.practise.kata.presentation.dictionary.mvi.viewmodel.AddDictionaryEntryViewModel
 import com.android.practise.kata.simplenotebookapp.ui.theme.SimpleNoteBookAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

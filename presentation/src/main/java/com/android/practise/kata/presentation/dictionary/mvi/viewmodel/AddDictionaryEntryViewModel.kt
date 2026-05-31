@@ -1,4 +1,4 @@
-package com.android.practise.kata.presentation.dictionary.viewmodel
+package com.android.practise.kata.presentation.dictionary.mvi.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.android.practise.kata.core.functional.Either
+import com.android.practise.kata.core.error.getErrorMessage
 
 @HiltViewModel
 class AddDictionaryEntryViewModel @Inject constructor(
@@ -54,11 +56,20 @@ class AddDictionaryEntryViewModel @Inject constructor(
         updateState { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
-            saveDictionaryEntryUseCase(currentState.word, currentState.meaning).onSuccess {
+            saveDictionaryEntryUseCase(currentState.word, currentState.meaning).collect { either ->
                 updateState { it.copy(isLoading = false) }
-                mutableEffect.emit(AddDictionaryEntryContract.AddDictionaryEntryEffect.NavigateBack)
-            }.onFailure { error ->
-                updateState { it.copy(isLoading = false, error = error.message ?: "An unknown error occurred") }
+                when (either) {
+                    is Either.Right -> {
+                        if (either.value) {
+                            mutableEffect.emit(AddDictionaryEntryContract.AddDictionaryEntryEffect.NavigateBack)
+                        } else {
+                            updateState { it.copy(error = "Failed to save entry") }
+                        }
+                    }
+                    is Either.Left -> {
+                        updateState { it.copy(error = either.value.getErrorMessage()) }
+                    }
+                }
             }
         }
     }

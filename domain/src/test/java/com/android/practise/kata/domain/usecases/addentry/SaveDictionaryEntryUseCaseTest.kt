@@ -1,45 +1,40 @@
 package com.android.practise.kata.domain.usecases.addentry
 
+import com.android.practise.kata.core.error.Failure
+import com.android.practise.kata.core.functional.Either
 import com.android.practise.kata.domain.repository.DictionaryRepository
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 
-class SaveDictionaryEntryUseCaseTest {
+class SaveDictionaryEntryUseCaseTest : BehaviorSpec({
+    val repository: DictionaryRepository = mockk()
+    val useCase = SaveDictionaryEntryUseCase(repository)
 
-    private val repository: DictionaryRepository = mockk()
-    private lateinit var useCase: SaveDictionaryEntryUseCase
-
-    @Before
-    fun setup() {
-        useCase = SaveDictionaryEntryUseCase(repository)
-    }
-
-    @Test
-    fun `invoke should call repository save and return success`() = runTest {
+    Given("a dictionary entry to save") {
         val word = "Kotlin"
-        val meaning = "Language"
-        coEvery { repository.saveEntry(word, meaning) } returns Result.success(Unit)
+        val meaning = "A modern programming language"
 
-        val result = useCase(word, meaning)
+        When("saving the entry is successful") {
+            coEvery { repository.saveEntry(word, meaning) } returns flowOf(Either.Right(true))
+            val result = useCase(word, meaning).first()
 
-        assertTrue(result.isSuccess)
+            Then("it should return a success result") {
+                result shouldBe Either.Right(true)
+            }
+        }
+
+        When("saving the entry fails") {
+            val exception = Exception("Network error")
+            coEvery { repository.saveEntry(word, meaning) } returns flowOf(Either.Left(Failure.UnknownError(exception)))
+            val result = useCase(word, meaning).first()
+
+            Then("it should return a failure result with the correct exception") {
+                result shouldBe Either.Left(Failure.UnknownError(exception))
+            }
+        }
     }
-
-    @Test
-    fun `invoke should return failure when repository returns failure`() = runTest {
-        val word = "Kotlin"
-        val meaning = "Language"
-        val exception = Exception("Failed to save")
-        coEvery { repository.saveEntry(word, meaning) } returns Result.failure(exception)
-
-        val result = useCase(word, meaning)
-
-        assertTrue(result.isFailure)
-        assertEquals(exception, result.exceptionOrNull())
-    }
-}
+})
