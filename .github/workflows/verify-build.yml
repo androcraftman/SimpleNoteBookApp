@@ -136,8 +136,18 @@ jobs:
       - name: Grant Execute Permission for Gradle Wrapper
         run: chmod +x gradlew
 
+      - name: Cache OWASP Dependency Check Data
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/dependency-check-data
+          key: ${{ runner.os }}-dependency-check-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-dependency-check-
+
       - name: Run OWASP Dependency Check
         run: ./gradlew dependencyCheckAnalyze
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
       - name: Upload Security Reports
         if: always()
