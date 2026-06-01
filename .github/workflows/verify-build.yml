@@ -40,6 +40,16 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
+      - name: Upload Test & Lint Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-and-lint-reports
+          path: |
+            **/build/reports/tests/testDebugUnitTest/*
+            **/build/test-results/testDebugUnitTest/*
+            **/build/reports/lint-results-debug.*
+
   # =========================================================================
   # STAGE 2: Code Quality & Static Analysis
   # =========================================================================
