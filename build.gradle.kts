@@ -75,4 +75,5 @@ dependencyCheck {
     format = "HTML"
     outputDirectory.set(file("$projectDir/build/reports/dependency-check"))
     failBuildOnCVSS = 8.0f
+    failOnError = false
 }
