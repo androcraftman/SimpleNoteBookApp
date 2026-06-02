@@ -3,12 +3,12 @@ name: Android CI/CD Pipeline
 on:
   push:
     branches:
-      - developer
+      - develop
       - 'feature/**'
   pull_request:
     branches:
-      - master
-      - developer
+      - main
+      - develop
 
 jobs:
   # =========================================================================
@@ -177,8 +177,8 @@ jobs:
     permissions:
       contents: write
       packages: write
-    # Only run archiving/publishing on push merges to developer and master
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/developer' || github.ref == 'refs/heads/master')
+    # Only run archiving/publishing on push merges to develop and main
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
