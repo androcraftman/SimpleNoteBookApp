@@ -2,6 +2,7 @@ package com.android.practise.kata.data.local.datasource
 
 import com.android.practise.kata.data.local.db.DictionaryDao
 import com.android.practise.kata.data.local.db.DictionaryEntryEntity
+import androidx.paging.PagingSource
 import javax.inject.Inject
 
 class DictionaryLocalDataSourceImpl
@@ -19,5 +20,9 @@ class DictionaryLocalDataSourceImpl
                     meaning = meaning,
                 ),
             )
+        }
+
+        override fun getPaginatedEntries(): PagingSource<Int, DictionaryEntryEntity> {
+            return dictionaryDao.getPaginatedEntries()
         }
     }

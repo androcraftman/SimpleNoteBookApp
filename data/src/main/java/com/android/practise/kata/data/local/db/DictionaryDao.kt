@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.paging.PagingSource
 
 @Dao
 interface DictionaryDao {
@@ -12,4 +13,7 @@ interface DictionaryDao {
 
     @Query("SELECT * FROM dictionary_entries ORDER BY timestamp DESC")
     suspend fun getAllEntries(): List<DictionaryEntryEntity>
+
+    @Query("SELECT * FROM dictionary_entries ORDER BY word ASC")
+    fun getPaginatedEntries(): PagingSource<Int, DictionaryEntryEntity>
 }

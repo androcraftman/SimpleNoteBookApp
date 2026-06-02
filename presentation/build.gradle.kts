@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -58,6 +59,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)
