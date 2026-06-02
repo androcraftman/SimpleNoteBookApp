@@ -1,0 +1,14 @@
+root = true
+
+[*.{kt,kts}]
+# Disable package name check since the module uses core_ui (with underscore)
+ktlint_standard_package-name = disabled
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_function-naming = disabled
+
+
+
+# Standard configuration
+indent_size = 4
+insert_final_newline = true
+max_line_length = 140
