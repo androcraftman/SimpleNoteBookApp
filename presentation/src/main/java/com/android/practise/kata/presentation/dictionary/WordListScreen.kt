@@ -61,9 +61,10 @@ fun WordListScreen(
         },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             contentAlignment = Alignment.Center,
         ) {
             when {
@@ -79,9 +80,10 @@ fun WordListScreen(
                     Text(
                         text = error.localizedMessage ?: "An error occurred",
                         color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .testTag(WordListTestTags.ERROR_TEXT),
+                        modifier =
+                            Modifier
+                                .padding(16.dp)
+                                .testTag(WordListTestTags.ERROR_TEXT),
                     )
                 }
                 // Empty state
@@ -95,9 +97,10 @@ fun WordListScreen(
                 // Populate List
                 else -> {
                     LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .testTag(WordListTestTags.WORD_LIST),
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .testTag(WordListTestTags.WORD_LIST),
                         contentPadding = PaddingValues(16.dp),
                     ) {
                         items(
@@ -116,9 +119,10 @@ fun WordListScreen(
                         if (appendState is LoadState.Loading) {
                             item {
                                 Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     CircularProgressIndicator()
@@ -129,9 +133,10 @@ fun WordListScreen(
                                 Text(
                                     text = appendState.error.localizedMessage ?: "Error loading more items",
                                     color = MaterialTheme.colorScheme.error,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
                                 )
                             }
                         }
@@ -148,15 +153,17 @@ fun WordItem(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
         ) {
             Text(
                 text = entry.word,
@@ -183,16 +190,18 @@ fun WordListPreview() {
     MaterialTheme {
         androidx.compose.material3.Surface {
             WordListScreen(
-                state = WordListContract.WordListState(
-                    wordsFlow = kotlinx.coroutines.flow.flowOf(
-                        PagingData.from(
-                            listOf(
-                                DictionaryEntry("Kotlin", "A modern programming language."),
-                                DictionaryEntry("Android", "An open-source operating system for mobile devices."),
+                state =
+                    WordListContract.WordListState(
+                        wordsFlow =
+                            kotlinx.coroutines.flow.flowOf(
+                                PagingData.from(
+                                    listOf(
+                                        DictionaryEntry("Kotlin", "A modern programming language."),
+                                        DictionaryEntry("Android", "An open-source operating system for mobile devices."),
+                                    ),
+                                ),
                             ),
-                        ),
                     ),
-                ),
                 dispatch = {},
             )
         }
