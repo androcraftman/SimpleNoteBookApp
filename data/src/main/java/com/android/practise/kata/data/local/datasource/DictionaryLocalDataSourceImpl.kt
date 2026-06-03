@@ -1,8 +1,8 @@
 package com.android.practise.kata.data.local.datasource
 
+import androidx.paging.PagingSource
 import com.android.practise.kata.data.local.db.DictionaryDao
 import com.android.practise.kata.data.local.db.DictionaryEntryEntity
-import androidx.paging.PagingSource
 import javax.inject.Inject
 
 class DictionaryLocalDataSourceImpl
