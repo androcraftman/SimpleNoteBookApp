@@ -17,14 +17,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.android.practise.kata.presentation.dictionary.AddDictionaryEntryScreen
+import com.android.practise.kata.presentation.dictionary.UpdateDictionaryEntryScreen
 import com.android.practise.kata.presentation.dictionary.WordListScreen
 import com.android.practise.kata.presentation.dictionary.mvi.AddDictionaryEntryContract
+import com.android.practise.kata.presentation.dictionary.mvi.UpdateDictionaryEntryContract
 import com.android.practise.kata.presentation.dictionary.mvi.WordListContract
 import com.android.practise.kata.presentation.dictionary.mvi.viewmodel.AddDictionaryEntryViewModel
 import com.android.practise.kata.presentation.dictionary.mvi.viewmodel.WordListViewModel
 import com.android.practise.kata.simplenotebookapp.navigation.WordAdd
 import com.android.practise.kata.simplenotebookapp.navigation.WordList
+import com.android.practise.kata.simplenotebookapp.navigation.WordUpdate
 import com.android.practise.kata.simplenotebookapp.ui.theme.SimpleNoteBookAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -54,6 +58,9 @@ class MainActivity : ComponentActivity() {
                                     when (effect) {
                                         WordListContract.WordListEffect.NavigateToAddWord -> {
                                             navController.navigate(WordAdd)
+                                        }
+                                        is WordListContract.WordListEffect.NavigateToWordUpdate -> {
+                                            navController.navigate(WordUpdate(effect.wordId))
                                         }
                                     }
                                 }
@@ -91,6 +98,23 @@ class MainActivity : ComponentActivity() {
                                 onIntent = { intent ->
                                     addDictionaryEntryViewModel.event(intent)
                                 },
+                            )
+                        }
+
+                        composable<WordUpdate> { backStackEntry ->
+                            val args = backStackEntry.toRoute<WordUpdate>()
+                            // Temporary state for Step 1 visual validation
+                            UpdateDictionaryEntryScreen(
+                                state = UpdateDictionaryEntryContract.UpdateDictionaryEntryState(
+                                    wordId = args.wordId,
+                                    word = args.wordId,
+                                    meaning = "Mock meaning for ${args.wordId}"
+                                ),
+                                onIntent = { event ->
+                                    if (event is UpdateDictionaryEntryContract.UpdateDictionaryEntryEvent.OnUpdateClicked) {
+                                        navController.popBackStack()
+                                    }
+                                }
                             )
                         }
                     }

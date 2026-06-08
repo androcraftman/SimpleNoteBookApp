@@ -14,6 +14,7 @@ interface WordListContract :
         > {
     sealed class WordListEvent {
         data object OnAddWordClicked : WordListEvent()
+        data class OnWordClicked(val word: String) : WordListEvent()
     }
 
     data class WordListState(
@@ -22,5 +23,6 @@ interface WordListContract :
 
     sealed class WordListEffect {
         data object NavigateToAddWord : WordListEffect()
+        data class NavigateToWordUpdate(val wordId: String) : WordListEffect()
     }
 }

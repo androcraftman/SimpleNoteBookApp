@@ -36,6 +36,12 @@ class WordListViewModel
                         mutableEffect.emit(WordListContract.WordListEffect.NavigateToAddWord)
                     }
                 }
+
+                is WordListContract.WordListEvent.OnWordClicked -> {
+                    viewModelScope.launch {
+                        mutableEffect.emit(WordListContract.WordListEffect.NavigateToWordUpdate(event.word))
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.android.practise.kata.presentation.dictionary
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -107,7 +108,12 @@ fun WordListScreen(
                         ) { index ->
                             val entry = lazyPagingItems[index]
                             if (entry != null) {
-                                WordItem(entry = entry)
+                                WordItem(
+                                    entry = entry,
+                                    modifier = Modifier.clickable {
+                                        dispatch(WordListContract.WordListEvent.OnWordClicked(entry.word))
+                                    }
+                                )
                             }
                         }
 

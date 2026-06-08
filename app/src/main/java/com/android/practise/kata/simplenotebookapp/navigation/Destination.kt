@@ -7,3 +7,6 @@ object WordList
 
 @Serializable
 object WordAdd
+
+@Serializable
+data class WordUpdate(val wordId: String)
